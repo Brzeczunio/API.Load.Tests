@@ -1,0 +1,26 @@
+{
+  "TestSuite": "test_suite",
+  "TestName": "test_http_api",
+
+  "TargetScenarios": [ "Example load test" ],
+
+  "GlobalSettings": {
+
+    "ScenariosSettings": [
+      {
+        "ScenarioName": "Example load test",
+        "WarmUpDuration": "00:00:03",
+
+        "LoadSimulationsSettings": [
+          { "RampingInject": [ 4, "00:00:01", "00:00:10" ] },
+          { "Inject": [ 20, "00:00:01", "00:00:05" ] },
+          { "RampingInject": [ 0, "00:00:01", "00:00:05" ] }
+        ]
+      }
+    ],
+
+    "ReportFileName": "my_custom_report_name",
+    "ReportFolder": "./my_reports",
+    "ReportFormats": [ "Html", "Txt" ]
+  }
+}
