@@ -27,7 +27,7 @@ namespace API.Load.Tests
         private const string _getProductsStepName = "get products";
 
         [Test]
-        public void LoadTest()
+        public void Example_LoadTest()
         {
             // Arrange
             using var httpClient = new HttpClient();
@@ -82,23 +82,28 @@ namespace API.Load.Tests
                 return Response.Ok();
             }).WithInit(ctx =>
             {
-                // We crate 10 users 
-                var users = FakeUsersGenerator.GenerateFakeUsers(10).ToArray();
+                ctx.Logger.Information("MY INIT");
+                // We crate 300 users 
+                var users = FakeUsersGenerator.GenerateFakeUsers(300).ToArray();
 
                 _usersFeed = DataFeed.Circular(users);
 
                 return Task.CompletedTask;
-            })
-              .WithoutWarmUp()
+            }).WithClean(ctx =>
+            {
+                ctx.Logger.Information("MY CLEAN");
+
+                return Task.CompletedTask;
+            }).WithWarmUpDuration(TimeSpan.FromSeconds(5))
               .WithLoadSimulations(Simulation.Inject(
-                rate: 1, 
+                rate: 5, 
                 interval: TimeSpan.FromSeconds(1), 
                 during: TimeSpan.FromSeconds(10)));
 
             // Act
             var result = NBomberRunner
                 .RegisterScenarios(scenario)
-                .WithWorkerPlugins(new HttpMetricsPlugin([HttpVersion.Version1]))
+                //.LoadConfig("./config.json")
                 .Run();
 
             // Assert
