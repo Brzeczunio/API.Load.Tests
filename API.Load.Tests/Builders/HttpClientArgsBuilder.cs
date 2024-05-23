@@ -1,6 +1,5 @@
 ﻿using NBomber.Contracts;
 using NBomber.Http;
-using System.Text.Json;
 
 namespace API.Load.Tests.Builders
 {
@@ -14,10 +13,6 @@ namespace API.Load.Tests.Builders
             return HttpClientArgs.Create(
                         timeout.Token,
                         httpCompletion: HttpCompletionOption.ResponseHeadersRead,
-                        jsonOptions: new JsonSerializerOptions
-                        {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                        },
                         logger: context.Logger
                     );
         }
